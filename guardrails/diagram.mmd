@@ -1,6 +1,4 @@
-## Guardrail System Architecture
 
-```mermaid
 graph LR
   A[User Query] --> B[Main Agent]
   B --> C[IsDataRelatedToHotels Object]
@@ -10,13 +8,3 @@ graph LR
   F -->|Yes| G[Return Response]
   F -->|No| H[Trigger Guardrail]
   style H fill:#f9d5d5,stroke:#ff5252
-```
-
-### Flow Explanation
-1. **Main Agent** processes the query and generates an `IsDataRelatedToHotels` object
-2. **Guardrail Agent** validates the object's contents
-3. System checks validation result:
-   - ✅ Valid: Returns the response
-   - ❌ Invalid: Triggers guardrail (blocks response)
-
-> **Note**: This ensures only hotel-related content passes through
