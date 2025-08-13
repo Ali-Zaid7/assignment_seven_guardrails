@@ -1,0 +1,66 @@
+
+%%{init: {'theme': 'default', 'themeVariables': {
+    'primaryColor': '#f5f5f5',
+    'primaryTextColor': '#222',
+    'primaryBorderColor': '#666',
+    'lineColor': '#333333',  // Dark visible lines
+    'tertiaryColor': '#f0f0f0',
+    'arrowheadColor': '#333333'  // Dark arrowheads
+}}}%%
+flowchart TD
+    A[User Input]:::input --> B{Input\nGuardrail}
+    B -->|Clean| C[Query Classifier]
+    B -->|Offensive| H[Human Agent]:::human
+    
+    C -->|Order Query| D[Order Tool\norders_db lookup]:::tool
+    C -->|FAQ Query| E[FAQ Tool\nfaq_db access]:::tool
+    
+    D -->|Found| F[Output\nGuardrail]
+    D -->|Not Found| H
+    E --> F
+    
+    F -->|Clean| G[Bot Response]:::success
+    F -->|Political| H
+    H --> I[Human Response]:::human
+
+    classDef input fill:#fff8e1,stroke:#666,color:#222
+    classDef tool fill:#e3f2fd,stroke:#666,color:#222
+    classDef human fill:#ffecb3,stroke:#666,color:#222
+    classDef success fill:#e8f5e9,stroke:#666,color:#222
+
+
+
+
+
+%%{init: {'theme': 'default', 'themeVariables': {
+    'primaryColor': '#f5f5f5',
+    'primaryTextColor': '#222',
+    'primaryBorderColor': '#555',
+    'lineColor': '#000000',  // Pure black lines
+    'fontSize': '16px',     // Larger text
+    'nodeBorder': '2px',    // Thicker borders
+    'tertiaryColor': '#f0f0f0',
+    'arrowheadColor': '#000000',
+    'edgeLabelBackground':'#ffffff'
+}, 'config': {'fontFamily': 'Arial'}}%%
+flowchart TD
+    A[User Input]:::input -->|Start| B{Input\nGuardrail}
+    B -->|Clean| C[[Query Classifier]]
+    B -->|Offensive\nLanguage| H[[Human Agent]]:::human
+    
+    C -->|Order\nQuery| D[[Order Status Tool\n● orders_db lookup]]:::tool
+    C -->|FAQ\nQuery| E[[FAQ Tool\n● faq_db access]]:::tool
+    
+    D -->|Order\nFound| F{Output\nGuardrail}
+    D -->|Order Not\nFound| H
+    E --> F
+    
+    F -->|Content\nApproved| G[[Bot Response]]:::success
+    F -->|Political\nContent| H
+    H --> I[[Human Resolution]]:::human
+
+    classDef input fill:#fff8e1,stroke:#555,color:#222,stroke-width:2px
+    classDef tool fill:#e3f2fd,stroke:#555,color:#222,stroke-width:2px
+    classDef human fill:#ffecb3,stroke:#555,color:#222,stroke-width:2px
+    classDef success fill:#e8f5e9,stroke:#555,color:#222,stroke-width:2px
+    class C,D,E,F,G,H,I stroke-width:2px
