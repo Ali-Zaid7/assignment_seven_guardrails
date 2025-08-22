@@ -39,3 +39,26 @@ async def main():
 
 if __name__ =="__main__":
     asyncio.run(main())
+
+# Output
+# Greetings! Welcome to Barbad Hotel. I'm happy to provide you with details about our hotel.
+
+# **Rooms:**
+
+# *   We offer a variety of rooms to suit your needs, including standard rooms, deluxe rooms, and suites.
+# *   All rooms are equipped with comfortable beds, private bathrooms, air conditioning, and free Wi-Fi.
+# *   Suites also include a separate living area and a balcony with stunning views.
+
+# **Facilities:**
+
+# *   We have a swimming pool, a fitness center, and a spa.
+# *   We also offer a business center and meeting rooms for our corporate guests.
+# *   Free parking is available for all guests.
+
+# **Dining:**
+
+# *   We have a restaurant that serves breakfast, lunch, and dinner.
+# *   We also have a bar that serves drinks and snacks.
+# *   Room service is available 24 hours a day.
+
+# Is there anything specific you'd like to know about our hotel?
