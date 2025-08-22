@@ -4,50 +4,34 @@ from agents import Agent,Runner,RunContextWrapper,GuardrailFunctionOutput,input_
 from pydantic import BaseModel
 
 # enable_verbose_stdout_logging()
-
 class IsDataRelatedToHotels(BaseModel):
     """Checks if the query is related to relevant hotels"""
-    # is_query_related_to_sannata_hotel: bool
-    # is_query_related_to_veerana_hotel: bool
-    is_user_asked_about_hotel:bool
-    user_hotel_mension_name:str
-    reasoning_summary_of_hotels: str
-    # user_asked_about_hotel_name:str
+    user_hotel_mension_name: str
+    reasoning_summary_of_hotels: str=""
 
-guardrail_agent =Agent(name="Guardrail Agent", model=model, output_type=IsDataRelatedToHotels
-    ,instructions="Check the query is related to hotels .")
+guardrail_agent =Agent(name="Guardrail Agent", model=model, output_type=IsDataRelatedToHotels,instructions="Check the query is related to hotels .")
 
 @input_guardrail
 async def hotel_guardrail(ctx: RunContextWrapper, agent: Agent, input_text: str) -> GuardrailFunctionOutput:
     result = await Runner.run(guardrail_agent, input_text, context=ctx.context)
     output = result.final_output
-    return GuardrailFunctionOutput(output_info=output, tripwire_triggered= not output.is_user_asked_about_hotel)
+    return GuardrailFunctionOutput(output_info=output, tripwire_triggered= not output.user_hotel_mension_name)
 
-def get_hotel_instructions(hotel_name):
-    instructions_template = (
-        """You are a helpful assistant for {hotel}.
+def get_hotel_instructions(hotel_name:str):
+    return f"""
+       J You are a helpful assistant for {hotel_name}.
         Always greet guests warmly and mention the hotel's name in your greeting.
         Provide recommendations for nearby attractions.
-        If a guest asks about {hotel}, give details about rooms, facilities, and dining options with dummy details.
+        If a guest asks about {hotel_name}, give details about rooms, facilities, and dining options with dummy details.
         Answers user every query related to hotels with dummy details"""
-    )
-    
-    return instructions_template.format(hotel=hotel_name)
-
-# # Example usage:
-# hotel_1 = get_hotel_instructions("Grand Palace Hotel")
-# hotel_2 = get_hotel_instructions("Ocean View Resort")
-
-# print(hotel_1)
-# print("-----------")
-# print(hotel_2)
-
-agent =Agent(name="GeneralAgent", model=model, input_guardrails=[hotel_guardrail],
-    instructions=get_hotel_instructions("Veerana and Sannata Hotels"))
 
 async def main():
-    try:
-        guard_result = await Runner.run(agent, "Give details about Veerana and Sannata hotels")
+    try: 
+        user_context=IsDataRelatedToHotels(user_hotel_mension_name="Barbad hotel")
+        agent =Agent(name="GeneralAgent", model=model, input_guardrails=[hotel_guardrail],
+            instructions=get_hotel_instructions(user_context.user_hotel_mension_name))
+
+        guard_result = await Runner.run(agent, "Give details hotel",context=user_context)
         print(guard_result.final_output)
 
     except Exception as er:
